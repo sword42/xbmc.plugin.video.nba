@@ -92,7 +92,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed, start_time, duration):
     selected_video_url = ''
     if video_type == "live":
         # transform the url
-        match = re.search('http://([^:]+)/([^?]+?)\?(.+)$', url)
+        match = re.search('https://([^:]+)/([^?]+?)\?(.+)$', url)
         domain = match.group(1)
         arguments = match.group(2)
         querystring = match.group(3)
@@ -102,7 +102,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed, start_time, duration):
 
         log("live cookie: %s %s" % (querystring, livecookies), xbmc.LOGDEBUG)
 
-        url = "http://%s/%s?%s" % (domain, arguments, querystring)
+        url = "https://%s/%s?%s" % (domain, arguments, querystring)
         url = getGameUrlWithBitrate(url, video_type)
 
         selected_video_url = "%s&Cookie=%s" % (url, livecookiesencoded)
@@ -110,8 +110,8 @@ def getGameUrl(video_id, video_type, video_ishomefeed, start_time, duration):
         # Archive and condensed flow: We now work with HLS.
         # The cookies are already in the URL and the server will supply them to ffmpeg later.
         selected_video_url = getGameUrlWithBitrate(url, video_type)
-        
-        
+
+
     if selected_video_url:
         log("the url of video %s is %s" % (video_id, selected_video_url), xbmc.LOGDEBUG)
 
@@ -123,7 +123,7 @@ def getHighlightGameUrl(video_id):
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': "AppleCoreMedia/1.0.0.8C148a (iPad; U; CPU OS 6_2_1 like Mac OS X; en_us)",
     }
-    
+
     body = urllib.urlencode({
         'extid': str(video_id),
         'plid': vars.player_id,
@@ -149,7 +149,7 @@ def getHighlightGameUrl(video_id):
     url, _,_ = url.partition("?")
 
     log("highlight video url: %s" % url, xbmc.LOGDEBUG)
-    
+
     return url
 
 def addGamesLinks(date = '', video_type = "archive"):
@@ -402,13 +402,13 @@ def chooseGameMenu(mode, video_type, date2Use = None):
         else:
             date = nowEST()
             log("current date (america timezone) is %s" % str(date), xbmc.LOGDEBUG)
-        
+
         # starts on mondays
         day = date.isoweekday()
         date = date - timedelta(day-1)
         if mode == "lastweek":
             date = date - timedelta(7)
-            
+
         addGamesLinks(date, video_type)
 
         # Can't sort the games list correctly because XBMC treats file items and directory
